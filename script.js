@@ -1,22 +1,15 @@
-(()=>{'use strict';
-const cfg=window.DEKNARAK_CONFIG||{};
-const demo=new URLSearchParams(location.search).get('demo')==='1';
-const $=id=>document.getElementById(id);
-const state={followers:Number(cfg.initialFollowers)||0,target:Math.max(1,Number(cfg.followerTarget)||1000),supporters:new Map(),queue:[],alertTimer:null,showing:false};
-const format=n=>Math.max(0,Math.floor(Number(n)||0)).toLocaleString('en-US');
-const safeName=s=>String(s??'UNKNOWN').slice(0,45);
-function render(){ $('followers').textContent=format(state.followers);$('target').textContent=format(state.target);const p=Math.min(100,Math.max(0,state.followers/state.target*100));$('progress-bar').style.width=p+'%';$('progress-percent').textContent=p.toFixed(1)+'% COMPLETE';const entries=[...state.supporters].sort((a,b)=>b[1]-a[1]).slice(0,3);const list=$('supporter-list');list.replaceChildren();if(!entries.length){const e=document.createElement('div');e.className='empty';e.textContent='WAITING FOR SUPPORTERS...';list.append(e);}entries.forEach(([name,score],i)=>{const row=document.createElement('div');row.className='supporter';for(const [cls,val] of [['rank',String(i+1).padStart(2,'0')],['supporter-name',name],['score','✦ '+format(score)]]){const el=document.createElement('span');el.className=cls;el.textContent=val;row.append(el)}list.append(row)})}
-function showNext(){if(state.showing||!state.queue.length)return;state.showing=true;const a=state.queue.shift();$('alert-type').textContent=a.type;$('alert-user').textContent=a.user;$('alert-message').textContent=a.message;$('alert').classList.add('show');state.alertTimer=setTimeout(()=>{$('alert').classList.remove('show');setTimeout(()=>{state.showing=false;showNext()},400)},Math.max(1500,Number(cfg.alertDurationMs)||5000))}
-function enqueue(type,user,message){state.queue.push({type,user:safeName(user),message:String(message).slice(0,100)});if(state.queue.length>15)state.queue.splice(0,state.queue.length-15);showNext()}
-function handleEvent(event){if(!event||typeof event!=='object')return;const type=String(event.type||'').toLowerCase();const user=safeName(event.user||event.username);if(type==='follow'){if(Number.isFinite(Number(event.totalFollowers))&&event.totalFollowers!==undefined){state.followers=Math.max(0,Math.floor(Number(event.totalFollowers)))}else{state.followers++}$('latest-follower').textContent=user;enqueue('NEW FOLLOWER',user,'WELCOME TO DEKNARAK!')}
-else if(type==='gift'){const gift=safeName(event.gift||'Gift');const count=Math.max(1,Math.floor(Number(event.count)||1));const points=Math.max(0,Number(event.points)||0);$('latest-gift').textContent=user;$('gift-detail').textContent=gift+' ×'+format(count);if(points>0)state.supporters.set(user,(state.supporters.get(user)||0)+points);enqueue('GIFT RECEIVED',user,gift+' ×'+format(count)+'  ✦ THANK YOU!')}
-else if(type==='followers'){if(Number.isFinite(Number(event.total))){state.followers=Math.max(0,Math.floor(Number(event.total)))}}
-else if(type==='goal'){if(Number.isFinite(Number(event.target))&&Number(event.target)>0)state.target=Math.floor(Number(event.target))}
-else if(type==='supporters'&&Array.isArray(event.items)){state.supporters.clear();event.items.slice(0,100).forEach(item=>{const name=safeName(item.user);const points=Math.max(0,Number(item.points)||0);state.supporters.set(name,points)})}
-else if(type==='reset'){state.supporters.clear();state.followers=Number(cfg.initialFollowers)||0;$('latest-follower').textContent='WAITING...';$('latest-gift').textContent='WAITING...';$('gift-detail').textContent='NO GIFTS YET'}render()}
-window.DEKNARAK={handleEvent}; // Optional integration hook for custom browser scripts.
-function connect(){if(demo)return;let socket;try{socket=new WebSocket(cfg.websocketUrl||'ws://127.0.0.1:8765')}catch(e){setTimeout(connect,cfg.reconnectMs||3000);return}socket.addEventListener('message',e=>{try{const data=JSON.parse(e.data);if(Array.isArray(data))data.forEach(handleEvent);else handleEvent(data)}catch(err){console.warn('Invalid event JSON',err)}});socket.addEventListener('close',()=>setTimeout(connect,cfg.reconnectMs||3000));socket.addEventListener('error',()=>socket.close())}
-function tick(){const d=new Date();$('clock').textContent=d.toLocaleTimeString('en-GB',{hour12:false})}setInterval(tick,1000);tick();
-function resize(){document.documentElement.style.setProperty('--scale',String(Math.min(innerWidth/1080,innerHeight/1920)))}addEventListener('resize',resize);resize();
-if(demo){document.body.classList.add('demo');handleEvent({type:'followers',total:684});handleEvent({type:'supporters',items:[{user:'CYBER_FOX',points:12500},{user:'NOVA_77',points:8200},{user:'PLAYER_ONE',points:4300}]});$('latest-follower').textContent='NOVA_77';$('latest-gift').textContent='CYBER_FOX';$('gift-detail').textContent='Galaxy ×3';addEventListener('keydown',e=>{if(e.key==='1')handleEvent({type:'follow',user:'DEMO_FOLLOWER'});if(e.key==='2')handleEvent({type:'gift',user:'DEMO_SUPPORTER',gift:'Rose',count:5,points:5});if(e.key==='3')handleEvent({type:'gift',user:'CYBER_FOX',gift:'Galaxy',count:1,points:1000});if(e.key==='4')handleEvent({type:'reset'})})}else connect();render();
+(() => {
+  'use strict';
+  const clock = document.getElementById('clock');
+  function tick() {
+    clock.textContent = new Date().toLocaleTimeString('en-GB', {hour12: false});
+  }
+  function resize() {
+    const scale = Math.min(window.innerWidth / 1080, window.innerHeight / 1920);
+    document.documentElement.style.setProperty('--scale', String(scale));
+  }
+  tick();
+  resize();
+  setInterval(tick, 1000);
+  window.addEventListener('resize', resize);
 })();

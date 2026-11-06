@@ -1,1 +1,75 @@
 :root{--cyan:#27efff;--cyan2:#08a9d2;--white:#e9fcff;--muted:#77aebc;--panel:rgba(2,12,23,.94);--line:rgba(39,239,255,.35)}*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:transparent;font-family:Inter,'Segoe UI',Tahoma,sans-serif;color:var(--white)}.overlay{width:1080px;height:1920px;position:absolute;top:0;left:0;overflow:hidden;transform-origin:top left;pointer-events:none;background:transparent}.overlay:before{content:"";position:absolute;inset:0;border:2px solid rgba(39,239,255,.16);pointer-events:none}.scanline{position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent 0,transparent 7px,rgba(0,230,255,.013) 8px);opacity:.55;pointer-events:none}.rail{position:absolute;width:4px;height:520px;top:355px;background:linear-gradient(transparent,var(--cyan),transparent);opacity:.5;animation:pulse 3s infinite}.rail.left{left:18px}.rail.right{right:18px;animation-delay:1.5s}.top{height:300px;position:relative;padding:55px 68px 25px;background:linear-gradient(180deg,rgba(2,9,18,.98) 0%,rgba(3,18,30,.97) 76%,rgba(3,18,30,0) 100%);border-top:7px solid var(--cyan)}.eyebrow{display:flex;align-items:center;gap:16px;color:var(--cyan);font-size:22px;font-weight:800;letter-spacing:5px}.live-dot{display:inline-block;width:12px;height:12px;background:var(--cyan);border-radius:50%;box-shadow:0 0 18px var(--cyan);animation:pulse 1.5s infinite}.line{display:inline-block;width:75px;height:1px;background:var(--line)}.brand{font-weight:1000;font-style:italic;letter-spacing:-5px;font-size:105px;line-height:1.15;text-shadow:0 0 30px rgba(39,239,255,.3)}.brand span:first-child{color:var(--cyan)}.brand-mark{font-size:40px;letter-spacing:-5px;color:var(--cyan);vertical-align:top;margin-left:15px}.subtitle{color:var(--muted);font-size:18px;font-weight:700;letter-spacing:6px}.top-bottom{display:flex;justify-content:space-between;border-top:1px solid var(--line);margin-top:25px;padding-top:16px;color:var(--cyan);font-size:16px;letter-spacing:2px}.game-area{position:absolute;top:330px;left:35px;width:1010px;height:840px;border:1px solid rgba(39,239,255,.13);background:transparent}.game-label{position:absolute;top:-14px;left:30px;padding:0 18px;background:#061521;color:var(--cyan);font-size:18px;letter-spacing:3px;font-weight:900}.blink{animation:pulse 1.2s infinite}.game-line{display:inline-block;width:70px;height:1px;background:var(--cyan);vertical-align:middle}.corner{position:absolute;width:74px;height:74px;border-color:var(--cyan);filter:drop-shadow(0 0 9px rgba(39,239,255,.8))}.tl{top:-2px;left:-2px;border-top:5px solid;border-left:5px solid}.tr{top:-2px;right:-2px;border-top:5px solid;border-right:5px solid}.bl{bottom:-2px;left:-2px;border-bottom:5px solid;border-left:5px solid}.br{bottom:-2px;right:-2px;border-bottom:5px solid;border-right:5px solid}.side-text{position:absolute;right:-17px;top:50%;transform:translateY(-50%) rotate(90deg);font-size:13px;letter-spacing:5px;color:var(--cyan);opacity:.8}.bottom-game-label{position:absolute;bottom:-14px;left:50%;transform:translateX(-50%);padding:3px 22px;background:#061521;color:#bcebf2;font-size:16px;letter-spacing:5px;white-space:nowrap}.bottom-game-label span{color:var(--cyan)}.dashboard{position:absolute;top:1195px;left:35px;width:1010px;height:725px;background:linear-gradient(180deg,rgba(2,12,22,.99),rgba(1,8,17,.99));border-top:3px solid var(--cyan);box-shadow:0 -10px 40px rgba(0,230,255,.12);padding:23px 28px}.section-title{display:flex;justify-content:space-between;align-items:center;font-size:22px;letter-spacing:4px;font-weight:900;margin-bottom:19px}.section-title>span:first-child{color:var(--cyan)}.section-title .small{font-size:13px;color:var(--muted);letter-spacing:2px}.panel{border:1px solid var(--line);background:linear-gradient(125deg,rgba(7,28,42,.96),rgba(1,10,20,.97));box-shadow:inset 0 0 26px rgba(39,239,255,.025);position:relative}.panel:before{content:"";position:absolute;left:-1px;top:-1px;width:35px;border-top:3px solid var(--cyan)}.goal{padding:22px 27px 20px}.panel-head{display:flex;align-items:center;justify-content:space-between;color:var(--cyan);font-weight:900;font-size:20px;letter-spacing:2px}.chip{border:1px solid var(--line);padding:5px 12px;font-size:12px;letter-spacing:2px}.goal-figures{display:flex;align-items:baseline;gap:16px;margin:10px 0}.goal-figures strong{font-size:60px;letter-spacing:1px;line-height:1}.goal-figures>span{font-size:24px;color:var(--muted)}.progress{height:17px;border:1px solid var(--line);background:#05101d;overflow:hidden}.progress-fill{height:100%;width:0%;background:linear-gradient(90deg,#087eae,var(--cyan));box-shadow:0 0 18px var(--cyan);transition:width .8s ease}.goal-foot{display:flex;justify-content:space-between;color:var(--muted);font-size:14px;font-weight:800;letter-spacing:2px;margin-top:12px}.stats{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}.stat{padding:19px 20px;min-height:130px}.stat .panel-head{font-size:16px}.stat-name{font-size:28px;font-weight:900;margin-top:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.stat-caption{color:var(--muted);font-size:12px;letter-spacing:2px;margin-top:5px}.supporters{margin-top:16px;padding:18px 22px;min-height:204px}.supporter-list{margin-top:12px;display:grid;gap:7px}.supporter{display:grid;grid-template-columns:50px 1fr auto;align-items:center;padding:6px 10px;background:rgba(39,239,255,.045);border-left:2px solid rgba(39,239,255,.5);font-size:19px}.rank{color:var(--cyan);font-weight:900}.supporter-name{font-weight:750;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.score{color:var(--cyan);font-weight:900}.empty{font-size:18px;letter-spacing:2px;color:var(--muted);padding:30px 0;text-align:center}.footer{display:flex;justify-content:space-between;align-items:center;margin-top:18px;font-size:15px;letter-spacing:2px;color:var(--muted);font-weight:800}.footer b{color:var(--cyan)}.alert{position:absolute;top:580px;left:95px;width:890px;min-height:180px;padding:28px;display:flex;align-items:center;gap:26px;border:2px solid var(--cyan);background:rgba(1,13,25,.96);box-shadow:0 0 45px rgba(39,239,255,.25),inset 0 0 30px rgba(39,239,255,.08);opacity:0;transform:translateY(45px) scale(.94);transition:opacity .35s,transform .35s}.alert.show{opacity:1;transform:translateY(0) scale(1)}.alert-icon{font-size:80px;color:var(--cyan);text-shadow:0 0 30px var(--cyan)}.alert-type{color:var(--cyan);font-size:18px;font-weight:900;letter-spacing:5px}.alert-user{font-size:43px;font-weight:950;overflow:hidden;text-overflow:ellipsis;max-width:650px;white-space:nowrap}.alert-message{color:#9cd4dd;font-size:22px;margin-top:5px}.demo-badge{display:none;position:absolute;top:309px;right:45px;padding:8px 15px;background:rgba(0,0,0,.9);border:1px solid #f5c542;color:#f5c542;font-size:16px;font-weight:900;letter-spacing:2px}.demo .demo-badge{display:block}@keyframes pulse{0%,100%{opacity:.4}50%{opacity:1}}@media(max-width:1079px){.overlay{transform:scale(var(--scale,1))}}
+/* TikTok LIVE Studio edition: purely decorative HTML; native widgets provide real data. */
+.dashboard{left:0;width:100%;padding:23px 63px 18px}
+.widget-slot{position:relative;border:1px solid rgba(39,239,255,.37);background:rgba(2,12,23,.14);margin-bottom:17px;overflow:hidden}
+.widget-slot:before{content:"";position:absolute;left:0;top:0;width:40px;border-top:3px solid var(--cyan)}
+.slot-label{height:53px;padding:15px 19px;display:flex;align-items:center;justify-content:space-between;color:var(--cyan);font-weight:900;font-size:19px;letter-spacing:2px;background:rgba(2,12,23,.8);border-bottom:1px solid rgba(39,239,255,.18)}
+.slot-note{font-size:12px;font-weight:700;letter-spacing:1px;color:var(--muted)}
+.slot-inner{background:transparent}
+.goal-slot{height:210px}.goal-slot .slot-inner{height:155px}
+.ranking-slot{height:370px}.ranking-slot .slot-inner{height:315px}
+.dashboard .footer{margin-top:13px}
+/* The main gameplay window remains transparent. Add native Alert as a source above this Link. */
+
+/* Match a 2560 x 1440 game source without stretching or cropping. */
+:root{--game-aspect:16 / 9}
+.game-area{top:750px;height:auto;aspect-ratio:var(--game-aspect);transform:translateY(-50%)}
+.game-surround{position:absolute;left:0;right:0;pointer-events:none;background:repeating-linear-gradient(115deg,transparent 0 90px,rgba(181,102,255,.08) 91px 93px,transparent 94px 180px),radial-gradient(ellipse at 85% 50%,rgba(139,55,215,.24),transparent 65%),linear-gradient(110deg,#081c2a,#130c25 70%,#1b1031)}
+.surround-top{top:235px;height:230.9375px}
+.surround-bottom{top:1034.0625px;height:160.9375px}
+.game-surround:after{content:"";position:absolute;left:68px;right:68px;height:1px;background:linear-gradient(90deg,transparent,var(--cyan),var(--violet),transparent);opacity:.45}
+.surround-top:after{bottom:42px}
+.surround-bottom:after{top:70px}
+
+/* Ambient motion stays on the frame, clear of gameplay and native widgets. */
+.top{overflow:hidden}
+.top:after{content:"";position:absolute;top:-7px;left:0;width:180px;height:7px;background:linear-gradient(90deg,transparent,#fff,transparent);box-shadow:0 0 20px var(--cyan);animation:header-signal 7s linear infinite;pointer-events:none}
+.brand{animation:brand-arrive 1s ease-out both}
+.brand-mark{display:inline-block;animation:mark-glow 4s ease-in-out infinite}
+.corner{animation:corner-glow 5s ease-in-out infinite}
+.corner.tr,.corner.bl{animation-delay:2.5s}
+.game-area:before,.game-area:after{content:"";position:absolute;top:90px;width:2px;height:100px;background:linear-gradient(transparent,var(--cyan),transparent);box-shadow:0 0 10px rgba(39,239,255,.6);animation:frame-signal 8s ease-in-out infinite;pointer-events:none}
+.game-area:before{left:-1px}
+.game-area:after{right:-1px;animation-delay:-4s}
+.widget-slot:before{animation:slot-signal 6s ease-in-out infinite}
+.ranking-slot:before{animation-delay:-3s}
+@keyframes header-signal{from{transform:translateX(-180px)}to{transform:translateX(1080px)}}
+@keyframes brand-arrive{from{opacity:0;transform:translateY(12px);filter:blur(4px)}to{opacity:1;transform:translateY(0);filter:blur(0)}}
+@keyframes mark-glow{0%,100%{opacity:.55;text-shadow:0 0 6px var(--cyan)}50%{opacity:1;text-shadow:0 0 20px var(--cyan)}}
+@keyframes corner-glow{0%,100%{opacity:.65}50%{opacity:1}}
+@keyframes frame-signal{0%{top:0;transform:translateY(0);opacity:0}15%,75%{opacity:.85}100%{top:100%;transform:translateY(-100%);opacity:0}}
+@keyframes slot-signal{0%,100%{transform:translateX(0);opacity:.5}50%{transform:translateX(160px);opacity:1}}
+/* Cyan / violet dual-core theme. Effects are confined to decorative panels. */
+:root{--violet:#b566ff;--pink:#ed91ff;--muted:#aaa0ce;--line:rgba(181,102,255,.4)}
+.overlay:before{border-color:rgba(181,102,255,.35)}
+.top{isolation:isolate;background:radial-gradient(ellipse at 85% 15%,rgba(130,41,213,.45),transparent 60%),linear-gradient(180deg,#10081f 0%,rgba(8,19,34,.98) 76%,transparent 100%);border-top:0}
+.top:before{content:"";position:absolute;z-index:-1;inset:-80px;background:repeating-linear-gradient(115deg,transparent 0 90px,rgba(181,102,255,.07) 91px 93px,transparent 94px 180px),radial-gradient(ellipse at 20% 35%,rgba(39,239,255,.18),transparent 45%);animation:aurora-drift 14s ease-in-out infinite alternate;pointer-events:none}
+.top:after{top:0;width:320px;height:5px;background:linear-gradient(90deg,transparent,var(--cyan),#fff,var(--violet),transparent)}
+.brand{position:relative;text-shadow:-3px 0 rgba(39,239,255,.65),3px 0 rgba(181,102,255,.75),0 0 35px rgba(181,102,255,.4);animation:brand-arrive 1s ease-out both,brand-phase 12s 1s infinite}
+.brand span:first-child{color:var(--violet);background:linear-gradient(105deg,var(--cyan),#fff 35%,var(--violet) 65%,var(--pink));background-size:220% 100%;background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:title-spectrum 8s ease-in-out infinite}
+.brand-mark{color:var(--pink)}
+.subtitle{color:#c2b5e5}
+.top-bottom{border-image:linear-gradient(90deg,var(--cyan),var(--violet)) 1}
+.rail{width:5px;background:linear-gradient(transparent,var(--cyan),var(--violet),transparent);box-shadow:0 0 18px rgba(181,102,255,.5)}
+.rail.right{background:linear-gradient(transparent,var(--violet),var(--cyan),transparent)}
+.game-area{border-color:rgba(181,102,255,.32);box-shadow:-6px 0 24px -16px var(--cyan),6px 0 24px -16px var(--violet)}
+.corner{color:var(--cyan)}
+.corner.tr,.corner.bl{color:var(--violet);filter:drop-shadow(0 0 12px rgba(181,102,255,.8))}
+.game-area:before,.game-area:after{height:150px;background:linear-gradient(transparent,var(--cyan),#fff,var(--violet),transparent)}
+.game-area:after{box-shadow:0 0 16px var(--violet)}
+.game-label,.bottom-game-label{background:#100d22;border-left:2px solid var(--cyan);border-right:2px solid var(--violet)}
+.bottom-game-label span,.side-text{color:var(--pink)}
+.dashboard{isolation:isolate;border-top:3px solid transparent;border-image:linear-gradient(90deg,var(--cyan),var(--violet),var(--pink)) 1;background:radial-gradient(ellipse at 100% 0,rgba(97,36,153,.28),transparent 55%),linear-gradient(180deg,#100c22,#060c19);box-shadow:0 -10px 40px rgba(181,102,255,.2)}
+.dashboard:before{content:"";position:absolute;z-index:-1;inset:0;opacity:.35;background-image:radial-gradient(circle,var(--violet) 1px,transparent 1.5px);background-size:30px 30px;mask-image:linear-gradient(90deg,#000,transparent 40%,transparent 65%,#000);pointer-events:none}
+.dashboard:after{content:"";position:absolute;top:-3px;left:0;width:180px;height:3px;background:linear-gradient(90deg,transparent,#fff,var(--cyan),transparent);box-shadow:0 0 15px var(--violet);animation:header-signal 6s linear infinite;pointer-events:none}
+.section-title .small{color:var(--pink);text-shadow:0 0 12px rgba(181,102,255,.5)}
+.widget-slot{border-color:rgba(181,102,255,.42);box-shadow:inset 0 0 20px rgba(181,102,255,.035)}
+.widget-slot:before{width:100px;border:0;height:3px;background:linear-gradient(90deg,var(--cyan),var(--violet),transparent)}
+.slot-label{background:linear-gradient(100deg,rgba(39,239,255,.08),rgba(181,102,255,.17));border-bottom-color:rgba(181,102,255,.25)}
+.ranking-slot .slot-label>span:first-child{color:var(--pink)}
+.footer b{display:inline-block;color:var(--pink);text-shadow:0 0 14px var(--violet);animation:star-orbit 12s linear infinite}
+@keyframes aurora-drift{from{transform:translateX(-20px) rotate(-3deg)}to{transform:translateX(35px) rotate(3deg)}}
+@keyframes title-spectrum{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+@keyframes brand-phase{0%,89%,94%,100%{text-shadow:-3px 0 rgba(39,239,255,.65),3px 0 rgba(181,102,255,.75),0 0 35px rgba(181,102,255,.4)}91%{text-shadow:-7px 0 var(--cyan),7px 0 var(--violet),0 0 40px var(--violet)}93%{text-shadow:4px 0 var(--cyan),-4px 0 var(--violet)}}
+@keyframes star-orbit{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.overlay *,.overlay *:before,.overlay *:after{animation:none!important;transition:none!important}}
