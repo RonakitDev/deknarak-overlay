@@ -2,7 +2,7 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     function knownStyle(style) {
-      return style in ["index","broadcast","arcade","editorial","zen","gojo","naruto","itachi","sasuke","onepiece","hon","lol","fivem","valorant","pubg","gojo-character","naruto-character","itachi-character","sasuke-character","onepiece-character","allstars","hon-character","lol-character","valorant-character","pubg-character"];
+      return style in ["index","broadcast","arcade","editorial","zen","gojo","naruto","itachi","sasuke","onepiece","hon","lol","fivem","valorant","pubg","gojo-character","naruto-character","itachi-character","sasuke-character","onepiece-character","allstars","hon-character","lol-character","valorant-character","pubg-character","rapunzel"];
     }
     function votePath(style) {
       return /databases/$(database)/documents/overlayVoters/$(request.auth.uid)/votes/$(style);

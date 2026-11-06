@@ -35,3 +35,5 @@ test('invalid payloads, negative/fractional counts and deletes are rejected',asy
  await assertSucceeds(paired(db,'eve',1,true,'naruto'));
  batch=writeBatch(db);batch.delete(r.total);batch.delete(r.vote);await assertFails(batch.commit());
 });
+
+test('Rapunzel accepts a valid paired like',async()=>{const db=env.authenticatedContext('rapunzel-fan').firestore();await assertSucceeds(paired(db,'rapunzel-fan',1,true,'rapunzel'));assert.equal((await getDoc(refs(db,'rapunzel-fan','rapunzel').total)).data().count,1);});

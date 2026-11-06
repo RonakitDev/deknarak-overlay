@@ -150,6 +150,12 @@
     "name": "PUBG / LEVEL 3 SURVIVOR",
     "description": "ทหารหมวกเลเวล 3 / PUBG",
     "path": "overlays/characters/games/pubg.html"
+  },
+  {
+    "id": "rapunzel",
+    "name": "RAPUNZEL",
+    "description": "ราพันเซล / หอคอย เปียทอง และโคมลอย",
+    "path": "overlays/fairytale/rapunzel.html"
   }
 ];
   const requested = new URLSearchParams(window.location.search).get('style');
