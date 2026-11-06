@@ -163,7 +163,7 @@
   const frame = document.getElementById('overlay-frame');
   const stage = document.getElementById('stage');
   const pane = document.querySelector('.preview-pane');
-  const sourceUrl = new URL(selected.path, window.location.href).href;
+  let sourceUrl = new URL(selected.path, window.location.href).href;
   document.body.dataset.style = selected.id;
   frame.src = sourceUrl;
   frame.title = 'ตัวอย่าง ' + selected.name;
@@ -173,6 +173,7 @@
   document.getElementById('source-link').href = sourceUrl;
   const urlField = document.getElementById('source-url');
   urlField.value = sourceUrl;
+  window.GameLayoutEditor?.mount({ id:selected.id, frame, sourceUrl, onChange:url=>{ sourceUrl=url;urlField.value=url;document.getElementById('source-link').href=url; } });
   function fitPreview() {
     const padding = window.getComputedStyle(pane);
     const width = pane.clientWidth - parseFloat(padding.paddingLeft) - parseFloat(padding.paddingRight);
@@ -186,15 +187,10 @@
   fitPreview();
   document.getElementById('copy-button').addEventListener('click', async () => {
     const status = document.getElementById('copy-status');
-    if (window.location.protocol === 'file:') {
-      urlField.focus(); urlField.select();
-      status.textContent = 'นี่คือไฟล์ในเครื่องค่ะ อัปโหลดไฟล์ก่อนใช้เป็นลิงก์ใน TikTok';
-      return;
-    }
     try {
       await navigator.clipboard.writeText(sourceUrl);
-      status.textContent = 'คัดลอกลิงก์ Overlay แล้วค่ะ';
-      window.dispatchEvent(new CustomEvent('overlay:copied', { detail: { style: selected.id } }));
+      status.textContent = window.location.protocol === 'file:' ? 'คัดลอกลิงก์ไฟล์ในเครื่องแล้วค่ะ ใช้ได้เฉพาะเครื่องนี้' : 'คัดลอกลิงก์ Overlay แล้วค่ะ';
+      if (window.location.protocol !== 'file:') window.dispatchEvent(new CustomEvent('overlay:copied', { detail: { style: selected.id } }));
     } catch {
       urlField.focus(); urlField.select();
       status.textContent = 'เลือกข้อความให้แล้วค่ะ กด Ctrl+C เพื่อคัดลอก';
