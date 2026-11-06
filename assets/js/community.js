@@ -148,7 +148,7 @@
       for (const id of ['feedback-status','request-status']) message(id,'ฟีเจอร์ชุมชนใช้ได้เมื่อเปิดผ่านเว็บไซต์หรือ localhost ค่ะ');
       return;
     }
-    const [{getClient}, operations] = await Promise.all([import('./firebase-client.js'),import('./community-data.js')]);
+    const [{getClient}, operations] = await Promise.all([import('./firebase-client.js'),import('./community-data.js?v=2')]);
     data = operations; client = await getClient();
     metrics(); feedback(); requests();
     if (pendingCopy && style) data.recordEngagement(client,style,'copied').catch(() => {});

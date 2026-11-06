@@ -27,7 +27,7 @@ export function requestPayload(values) {
   return { title, description, name };
 }
 async function saveModerated(client, ref, payload) {
-  const { firestore: f } = client;
+  const { firestore: f, db } = client;
   await f.runTransaction(db, async tx => {
     const old = await tx.get(ref);
     tx.set(ref, { ...payload, status: 'pending', createdAt: old.exists() ? old.data().createdAt : f.serverTimestamp(), updatedAt: f.serverTimestamp() });
