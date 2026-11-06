@@ -4,9 +4,9 @@
 HTML เป็นกรอบตกแต่งเท่านั้น ส่วน Alert / Goal / Creator rankings ให้ TikTok LIVE Studio แสดงเอง
 
 ## อัปโหลด GitHub Pages
-อัปโหลดไฟล์ index.html, style.css, script.js ทับไฟล์เดิมที่ root ของ repository
-(ลบ config.js, bridge.py และ bridge.mjs ได้หากไม่ใช้งาน)
-รอ GitHub Pages deploy แล้วเปิด URL เดิมเพื่อทดสอบ
+อัปโหลด index.html, styles.html, preview.html พร้อมโฟลเดอร์ assets/ และ overlays/ โดยรักษาโครงสร้างโฟลเดอร์เดิม ห้ามย้ายไฟล์ด้านในขึ้นมาไว้ที่ root
+(ลบ tools/legacy/config.js, tools/legacy/bridge.py และ bridge.mjs ได้หากไม่ใช้งาน)
+รอ GitHub Pages deploy แล้วเปิด styles.html เพื่อเลือกแบบและคัดลอกลิงก์ Overlay ใหม่จากหน้าพรีวิว ส่วน index.html ยังคงเป็น Default
 
 ## จัด Source ใน TikTok LIVE Studio
 1. Game Capture: ภาพเกมเป็นชั้นล่างสุด

@@ -1,0 +1,53 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function knownStyle(style) {
+      return style in ["index","broadcast","arcade","editorial","zen","gojo","naruto","itachi","sasuke","onepiece","hon","lol","fivem","valorant","pubg","gojo-character","naruto-character","itachi-character","sasuke-character","onepiece-character","allstars","hon-character","lol-character","valorant-character","pubg-character"];
+    }
+    function votePath(style) {
+      return /databases/$(database)/documents/overlayVoters/$(request.auth.uid)/votes/$(style);
+    }
+    function totalPath(style) {
+      return /databases/$(database)/documents/overlayLikes/$(style);
+    }
+    function previouslyLiked(style) {
+      return exists(votePath(style)) && get(votePath(style)).data.liked == true;
+    }
+    function previousCount(style) {
+      return exists(totalPath(style)) ? get(totalPath(style)).data.count : 0;
+    }
+    function validTotal() {
+      return request.resource.data.keys().hasAll(['count', 'updatedAt'])
+        && request.resource.data.keys().hasOnly(['count', 'updatedAt'])
+        && request.resource.data.count is int
+        && request.resource.data.count >= 0
+        && request.resource.data.updatedAt == request.time;
+    }
+    function pairedTotalChange(style) {
+      let before = previouslyLiked(style);
+      let after = getAfter(votePath(style)).data.liked;
+      return after is bool && after != before
+        && getAfter(votePath(style)).data.updatedAt == request.time
+        && request.resource.data.count == previousCount(style) + (after ? 1 : -1);
+    }
+    match /overlayLikes/{style} {
+      allow read: if true;
+      allow create, update: if request.auth != null && knownStyle(style)
+        && validTotal() && pairedTotalChange(style);
+      allow delete: if false;
+    }
+    match /overlayVoters/{uid}/votes/{style} {
+      allow read: if request.auth != null && request.auth.uid == uid;
+      allow create, update: if request.auth != null && request.auth.uid == uid
+        && knownStyle(style)
+        && request.resource.data.keys().hasAll(['liked', 'updatedAt'])
+        && request.resource.data.keys().hasOnly(['liked', 'updatedAt'])
+        && request.resource.data.liked is bool
+        && request.resource.data.updatedAt == request.time
+        && request.resource.data.liked != previouslyLiked(style)
+        && getAfter(totalPath(style)).data.count == previousCount(style) + (request.resource.data.liked ? 1 : -1)
+        && getAfter(totalPath(style)).data.updatedAt == request.time;
+      allow delete: if false;
+    }
+  }
+}

@@ -4,16 +4,16 @@ Transparent vertical gaming HUD. No webcam. Black × Cyan Futuristic.
 
 ## Files
 - `index.html` — overlay structure
-- `style.css` — theme, panels, animations
-- `config.js` — channel, initial follower count, target, WebSocket address
-- `script.js` — follower goal, gifts, supporters, alerts, demo and WebSocket client
-- `bridge.py` — optional local HTTP-to-WebSocket relay (NOT a TikTok connector)
+- `assets/css/default.css` — theme, panels, animations
+- `tools/legacy/config.js` — channel, initial follower count, target, WebSocket address
+- `assets/js/overlay.js` — follower goal, gifts, supporters, alerts, demo and WebSocket client
+- `tools/legacy/bridge.py` — optional local HTTP-to-WebSocket relay (NOT a TikTok connector)
 
 ## OBS setup
 1. Set **Settings → Video → Base (Canvas) Resolution** to **1080 × 1920** and **Output (Scaled) Resolution** to **1080 × 1920**.
 2. Add **Game Capture** (or Window Capture) and position it behind the overlay, within the open central area (roughly x=35–1045, y=330–1170). OBS can crop/scale your game source as needed.
 3. Add **Browser Source** above Game Capture. Enable **Local file**, select `index.html`, set **Width 1080** and **Height 1920**. The overlay background is transparent.
-4. In `config.js`, edit `initialFollowers` and `followerTarget`. Do not claim real data unless supplied by an actual integration.
+4. In `tools/legacy/config.js`, edit `initialFollowers` and `followerTarget`. Do not claim real data unless supplied by an actual integration.
 5. For live data, run the optional relay and connect an authorized TikTok event provider to its HTTP endpoint.
 6. To test animations outside OBS, open `index.html?demo=1` in a browser via a local web server. See Demo below.
 
@@ -24,11 +24,11 @@ Normal `index.html` NEVER generates simulated events.
 
 ## Live data relay (optional)
 Requires Python 3.10+ and `pip install websockets` (current versions using `websockets.asyncio.server`).
-Run `python bridge.py`. It listens **only on localhost**:
+Run `python tools/legacy/bridge.py`. It listens **only on localhost**:
 - WebSocket (overlay): `ws://127.0.0.1:8765`
 - HTTP ingestion: `http://127.0.0.1:8766/event`
 
-PowerShell example (while bridge.py runs):
+PowerShell example (while tools/legacy/bridge.py runs):
 ```powershell
 Invoke-RestMethod -Uri http://127.0.0.1:8766/event -Method Post -ContentType 'application/json' -Body '{"type":"follow","user":"Viewer123"}'
 ```
@@ -60,4 +60,4 @@ OBS Browser Source is straightforward. If you broadcast via TikTok LIVE Studio i
 - Transparent gameplay area: overlay only draws corners and labels over the center.
 - Bottom dashboard and top banner are opaque; place the game where it remains readable.
 - Browser Source uses the fixed 1080 × 1920 design dimensions.
-- Alerts intentionally cover gameplay briefly; reduce `alertDurationMs` in `config.js` if desired.
+- Alerts intentionally cover gameplay briefly; reduce `alertDurationMs` in `tools/legacy/config.js` if desired.
