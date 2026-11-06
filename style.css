@@ -11,6 +11,9 @@
 .dashboard .footer{margin-top:13px}
 /* The main gameplay window remains transparent. Add native Alert as a source above this Link. */
 
+/* Apply viewport fitting at every width, including 1080px browser sources. */
+.overlay{transform:scale(var(--scale,1))}
+
 /* Match a 2560 x 1440 game source without stretching or cropping. */
 :root{--game-aspect:16 / 9}
 .game-area{top:750px;height:auto;aspect-ratio:var(--game-aspect);transform:translateY(-50%)}
