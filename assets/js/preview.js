@@ -164,6 +164,7 @@
   const stage = document.getElementById('stage');
   const pane = document.querySelector('.preview-pane');
   const sourceUrl = new URL(selected.path, window.location.href).href;
+  document.body.dataset.style = selected.id;
   frame.src = sourceUrl;
   frame.title = 'ตัวอย่าง ' + selected.name;
   document.title = selected.name + ' — DEKNARAK Preview';
@@ -193,6 +194,7 @@
     try {
       await navigator.clipboard.writeText(sourceUrl);
       status.textContent = 'คัดลอกลิงก์ Overlay แล้วค่ะ';
+      window.dispatchEvent(new CustomEvent('overlay:copied', { detail: { style: selected.id } }));
     } catch {
       urlField.focus(); urlField.select();
       status.textContent = 'เลือกข้อความให้แล้วค่ะ กด Ctrl+C เพื่อคัดลอก';

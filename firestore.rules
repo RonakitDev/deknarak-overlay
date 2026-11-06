@@ -49,5 +49,111 @@ service cloud.firestore {
         && getAfter(totalPath(style)).data.updatedAt == request.time;
       allow delete: if false;
     }
+    function visitorPath(style) {
+      return /databases/$(database)/documents/engagementVisitors/$(request.auth.uid)/styles/$(style);
+    }
+    function engagementPath(style) {
+      return /databases/$(database)/documents/styleEngagement/$(style);
+    }
+    function previousVisit(style) {
+      return exists(visitorPath(style)) ? get(visitorPath(style)).data : { 'viewed': false, 'copied': false };
+    }
+    function previousEngagement(style) {
+      return exists(engagementPath(style)) ? get(engagementPath(style)).data : { 'views': 0, 'copies': 0 };
+    }
+    function validVisit(style) {
+      let before = previousVisit(style);
+      let after = getAfter(visitorPath(style)).data;
+      return after.keys().hasAll(['viewed','copied','updatedAt'])
+        && after.keys().hasOnly(['viewed','copied','updatedAt'])
+        && after.viewed is bool && after.copied is bool
+        && after.viewed == true && (!before.copied || after.copied)
+        && (!before.viewed || after.viewed)
+        && (after.viewed != before.viewed || after.copied != before.copied)
+        && after.updatedAt == request.time;
+    }
+    function validEngagement(style) {
+      let before = previousVisit(style);
+      let after = getAfter(visitorPath(style)).data;
+      let totals = previousEngagement(style);
+      let result = getAfter(engagementPath(style)).data;
+      return result.keys().hasAll(['views','copies','updatedAt'])
+        && result.keys().hasOnly(['views','copies','updatedAt'])
+        && result.views is int && result.copies is int
+        && result.views >= 0 && result.copies >= 0 && result.copies <= result.views
+        && result.updatedAt == request.time
+        && result.views == totals.views + (after.viewed && !before.viewed ? 1 : 0)
+        && result.copies == totals.copies + (after.copied && !before.copied ? 1 : 0);
+    }
+    match /styleEngagement/{style} {
+      allow read: if true;
+      allow create, update: if request.auth != null && knownStyle(style) && validVisit(style) && validEngagement(style);
+    }
+    match /engagementVisitors/{uid}/styles/{style} {
+      allow read: if request.auth != null && request.auth.uid == uid;
+      allow create, update: if request.auth != null && request.auth.uid == uid && knownStyle(style)
+        && validVisit(style) && validEngagement(style);
+    }
+    function validAuthorText(data) {
+      return data.name is string && data.name.size() >= 1 && data.name.size() <= 30
+        && data.status == 'pending' && data.updatedAt == request.time;
+    }
+    match /styleFeedback/{style}/entries/{uid} {
+      allow get: if (request.auth != null && request.auth.uid == uid) || resource.data.status == 'published';
+      allow list: if resource.data.status == 'published' && request.query.limit <= 50;
+      function validFeedback() {
+        let data = request.resource.data;
+        return request.auth != null && request.auth.uid == uid && knownStyle(style)
+          && data.keys().hasAll(['rating','name','text','status','createdAt','updatedAt'])
+          && data.keys().hasOnly(['rating','name','text','status','createdAt','updatedAt'])
+          && validAuthorText(data) && data.rating is int && data.rating >= 1 && data.rating <= 5
+          && data.text is string && data.text.size() <= 500;
+      }
+      allow create: if validFeedback() && request.resource.data.createdAt == request.time;
+      allow update: if validFeedback() && request.resource.data.createdAt == resource.data.createdAt
+        && request.time >= resource.data.updatedAt + duration.value(60, 's');
+    }
+    match /themeRequests/{uid} {
+      allow get: if (request.auth != null && request.auth.uid == uid) || resource.data.status == 'published';
+      allow list: if resource.data.status == 'published' && request.query.limit <= 30;
+      function validRequest() {
+        let data = request.resource.data;
+        return request.auth != null && request.auth.uid == uid
+          && data.keys().hasAll(['title','description','name','status','createdAt','updatedAt'])
+          && data.keys().hasOnly(['title','description','name','status','createdAt','updatedAt'])
+          && validAuthorText(data) && data.title is string && data.title.size() >= 3 && data.title.size() <= 80
+          && data.description is string && data.description.size() >= 10 && data.description.size() <= 500;
+      }
+      allow create: if validRequest() && request.resource.data.createdAt == request.time;
+      allow update: if validRequest() && request.resource.data.createdAt == resource.data.createdAt
+        && request.time >= resource.data.updatedAt + duration.value(600, 's');
+    }
+    function requestVotePath(id) {
+      return /databases/$(database)/documents/themeRequestVoters/$(request.auth.uid)/votes/$(id);
+    }
+    function requestCountPath(id) {
+      return /databases/$(database)/documents/themeRequestTotals/$(id);
+    }
+    function pairedRequestVote(id) {
+      let before = exists(requestVotePath(id)) && get(requestVotePath(id)).data.liked == true;
+      let after = getAfter(requestVotePath(id)).data;
+      let count = exists(requestCountPath(id)) ? get(requestCountPath(id)).data.count : 0;
+      let total = getAfter(requestCountPath(id)).data;
+      return get(/databases/$(database)/documents/themeRequests/$(id)).data.status == 'published'
+        && after.keys().hasAll(['liked','updatedAt']) && after.keys().hasOnly(['liked','updatedAt'])
+        && after.liked is bool && after.liked != before && after.updatedAt == request.time
+        && total.keys().hasAll(['count','updatedAt']) && total.keys().hasOnly(['count','updatedAt'])
+        && total.count is int && total.count >= 0 && total.count == count + (after.liked ? 1 : -1)
+        && total.updatedAt == request.time;
+    }
+    match /themeRequestTotals/{id} {
+      allow read: if true;
+      allow create, update: if request.auth != null && pairedRequestVote(id);
+    }
+    match /themeRequestVoters/{uid}/votes/{id} {
+      allow read: if request.auth != null && request.auth.uid == uid;
+      allow create, update: if request.auth != null && request.auth.uid == uid && pairedRequestVote(id);
+    }
+
   }
 }

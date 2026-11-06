@@ -27,6 +27,7 @@ function harness({ protocol = 'https:', error = null } = {}) {
   };
   const imports = async url => {
     if(error) throw error;
+    if(url.includes('firebase-client.js')) return { getClient: async () => ({ user: { uid: 'user-a' }, db: {}, firestore: sdk }) };
     if(url.includes('firebase-app.js')) return { initializeApp: () => ({}) };
     if(url.includes('firebase-auth.js')) return { getAuth: () => ({ authStateReady: async () => {}, currentUser: { uid:'user-a' } }) };
     if(url.includes('firebase-firestore.js')) return sdk;

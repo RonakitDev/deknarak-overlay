@@ -37,3 +37,58 @@ test('invalid payloads, negative/fractional counts and deletes are rejected',asy
 });
 
 test('Rapunzel accepts a valid paired like',async()=>{const db=env.authenticatedContext('rapunzel-fan').firestore();await assertSucceeds(paired(db,'rapunzel-fan',1,true,'rapunzel'));assert.equal((await getDoc(refs(db,'rapunzel-fan','rapunzel').total)).data().count,1);});
+
+const sdk = external('firebase/firestore');
+let operations;
+before(async()=>{ operations=await import(require('node:url').pathToFileURL(path.resolve(__dirname,'../../assets/js/community-data.js')).href); });
+function clientFor(uid){ return { user:{uid}, db:env.authenticatedContext(uid).firestore(), firestore:sdk }; }
+async function publish(refPath, changes){ await env.withSecurityRulesDisabled(async context=>{await sdk.setDoc(sdk.doc(context.firestore(),...refPath),changes,{merge:true});}); }
+test('unique views/copies are atomic, idempotent and private',async()=>{
+ const a=clientFor('visitor-a'),b=clientFor('visitor-b');
+ await assertSucceeds(operations.recordEngagement(a,'gojo','viewed'));
+ assert.equal(await operations.recordEngagement(a,'gojo','viewed'),false);
+ await assertSucceeds(operations.recordEngagement(a,'gojo','copied'));
+ assert.equal(await operations.recordEngagement(a,'gojo','copied'),false);
+ await assertSucceeds(operations.recordEngagement(b,'gojo','copied'));
+ const total=await sdk.getDoc(sdk.doc(a.db,'styleEngagement','gojo'));assert.equal(total.data().views,2);assert.equal(total.data().copies,2);
+ await assertFails(sdk.getDoc(sdk.doc(b.db,'engagementVisitors','visitor-a','styles','gojo')));
+ const forged=sdk.writeBatch(a.db);forged.set(sdk.doc(a.db,'styleEngagement','gojo'),{views:999,copies:999,updatedAt:sdk.serverTimestamp()});await assertFails(forged.commit());
+ await assertFails(sdk.setDoc(sdk.doc(a.db,'engagementVisitors','visitor-a','styles','gojo'),{viewed:false,copied:false,updatedAt:sdk.serverTimestamp()}));
+ await assertFails(operations.recordEngagement(a,'not-a-style','viewed'));
+});
+test('feedback stays pending; only moderated feedback is public and edits have a server cooldown',async()=>{
+ const a=clientFor('reviewer-a'),other=clientFor('reviewer-b'),publicDb=env.unauthenticatedContext().firestore();
+ const payload={rating:5,name:'Viewer',text:'<img src=x onerror=alert(1)>'};
+ await assertSucceeds(operations.submitFeedback(a,'gojo',payload));
+ const ownRef=sdk.doc(a.db,'styleFeedback','gojo','entries',a.user.uid);
+ assert.equal((await sdk.getDoc(ownRef)).data().status,'pending');
+ await assertFails(sdk.getDoc(sdk.doc(other.db,'styleFeedback','gojo','entries',a.user.uid)));
+ const q=sdk.query(sdk.collection(publicDb,'styleFeedback','gojo','entries'),sdk.where('status','==','published'),sdk.limit(50));
+ assert.equal((await assertSucceeds(sdk.getDocs(q))).size,0);
+ await assertFails(sdk.getDocs(sdk.collection(publicDb,'styleFeedback','gojo','entries')));
+ await assertFails(operations.submitFeedback(a,'gojo',{...payload,rating:4}));
+ await publish(['styleFeedback','gojo','entries',a.user.uid],{status:'published',updatedAt:sdk.Timestamp.fromMillis(Date.now()-120000)});
+ assert.equal((await sdk.getDocs(q)).size,1);
+ await assertSucceeds(operations.submitFeedback(a,'gojo',{...payload,rating:4}));assert.equal((await sdk.getDocs(q)).size,0);
+ const badRef=sdk.doc(other.db,'styleFeedback','gojo','entries',other.user.uid);
+ await assertFails(sdk.setDoc(badRef,{rating:6,name:'Viewer',text:'bad',status:'pending',createdAt:sdk.serverTimestamp(),updatedAt:sdk.serverTimestamp()}));
+ await assertFails(sdk.setDoc(badRef,{rating:5,name:'Viewer',text:'bad',status:'published',createdAt:sdk.serverTimestamp(),updatedAt:sdk.serverTimestamp()}));
+ await assertFails(operations.submitFeedback(a,'unknown',payload));
+});
+test('requests are moderated/rate-limited and request votes are paired and owned',async()=>{
+ const a=clientFor('request-author'),b=clientFor('request-fan'),c=clientFor('request-fan-2');
+ const payload={title:'Moon garden',description:'A peaceful midnight garden theme',name:'Viewer'};
+ await assertSucceeds(operations.submitRequest(a,payload));
+ await assertFails(operations.submitRequest(a,{...payload,title:'Another theme'}));
+ await assertFails(operations.voteRequest(b,a.user.uid,true));
+ const q=sdk.query(sdk.collection(b.db,'themeRequests'),sdk.where('status','==','published'),sdk.limit(30));assert.equal((await sdk.getDocs(q)).size,0);
+ await assertFails(sdk.getDocs(sdk.collection(b.db,'themeRequests')));
+ await publish(['themeRequests',a.user.uid],{status:'published'});
+ assert.equal((await sdk.getDocs(q)).size,1);
+ await assertSucceeds(operations.voteRequest(b,a.user.uid,true));await operations.voteRequest(b,a.user.uid,true);
+ await assertSucceeds(operations.voteRequest(c,a.user.uid,true));await assertSucceeds(operations.voteRequest(b,a.user.uid,false));
+ assert.equal((await sdk.getDoc(sdk.doc(b.db,'themeRequestTotals',a.user.uid))).data().count,1);
+ await assertFails(sdk.setDoc(sdk.doc(b.db,'themeRequestTotals',a.user.uid),{count:888,updatedAt:sdk.serverTimestamp()}));
+ await assertFails(sdk.getDoc(sdk.doc(b.db,'themeRequestVoters',c.user.uid,'votes',a.user.uid)));
+ await assertFails(sdk.setDoc(sdk.doc(b.db,'themeRequests','someone-else'),{...payload,status:'pending',createdAt:sdk.serverTimestamp(),updatedAt:sdk.serverTimestamp()}));
+});

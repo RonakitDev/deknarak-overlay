@@ -46,17 +46,10 @@ async function start() {
     status.textContent = 'ดูยอดและกดไลค์ได้เมื่อเปิดผ่านเว็บไซต์หรือ localhost ค่ะ';
     return;
   }
-  const [{ initializeApp }, authSdk, firestore, { firebaseConfig }] = await Promise.all([
-    import('https://www.gstatic.com/firebasejs/13.2.0/firebase-app.js'),
-    import('https://www.gstatic.com/firebasejs/13.2.0/firebase-auth.js'),
-    import('https://www.gstatic.com/firebasejs/13.2.0/firebase-firestore.js'),
-    import('./firebase-config.js')
-  ]);
-  const app = initializeApp(firebaseConfig);
-  const auth = authSdk.getAuth(app);
-  await auth.authStateReady();
-  user = auth.currentUser || (await authSdk.signInAnonymously(auth)).user;
-  const db = firestore.getFirestore(app);
+  const { getClient } = await import('./firebase-client.js');
+  const client = await getClient();
+  const { db, firestore } = client;
+  user = client.user;
   subscriptions.push(firestore.onSnapshot(firestore.collection(db, 'overlayLikes'), { includeMetadataChanges: true }, snapshot => {
     for (const model of models.values()) model.count = 0;
     for (const item of snapshot.docs) {
