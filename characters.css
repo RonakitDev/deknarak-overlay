@@ -1,0 +1,19 @@
+/* Character portraits stay within the header; gameplay and widgets retain their positions. */
+.character-edition .masthead{height:390px;overflow:hidden}
+.character-edition .character-art{position:absolute;right:0;bottom:0;width:440px;height:350px;object-fit:contain;object-position:center bottom;z-index:1;filter:drop-shadow(0 0 18px color-mix(in srgb,var(--accent) 30%,transparent));animation:portrait-arrive .9s ease-out both}
+.character-edition .edition{position:relative;z-index:3;font-family:'Segoe UI',sans-serif;font-size:12px;letter-spacing:2px}
+.character-edition .edition>span:last-child{background:var(--paper);padding:5px 10px}
+.character-edition .headline{position:relative;z-index:2;width:555px;margin-top:48px;font-size:80px;line-height:.94;letter-spacing:-4px}
+.character-edition .brand-first,.character-edition .brand-last{display:block;padding-left:0}
+.character-edition .subtitle{position:relative;z-index:2;width:560px;font-size:11px;letter-spacing:2px;margin:17px 0}
+.character-edition .headline-detail{position:relative;z-index:2;width:550px;font-size:11px;letter-spacing:1px;padding-top:12px}
+.character-edition .theme-emblem{opacity:.12;right:160px}
+.character-edition .theme-kanji{display:none}
+.character-edition.naruto .headline{margin-top:30px;font-size:77px}
+.character-edition.naruto .edition{padding:10px 12px}
+.character-edition.itachi .headline{font-size:83px;margin-top:52px}
+.character-edition.sasuke .headline{font-size:80px;margin-top:45px}
+.character-edition.onepiece .headline{font-size:76px;margin-top:30px}
+.character-edition.onepiece .character-art{right:0;width:420px}
+@keyframes portrait-arrive{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){.character-edition .character-art{animation:none}}

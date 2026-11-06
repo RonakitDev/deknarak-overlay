@@ -1,0 +1,31 @@
+/* Existing generated portraits arranged as a five-character team. */
+.allstars{--paper:#10101e;--ink:#f0edf9;--accent:#beabff;--rule:#5e536e;font-family:'Segoe UI',Tahoma,sans-serif}
+.allstars .upper-surface{background:radial-gradient(ellipse at 0 0,#163e60,transparent 50%),radial-gradient(ellipse at 100% 0,#5d3020,transparent 50%),#10101e}
+.allstars .masthead{padding:25px 40px 0;height:390px;overflow:hidden}
+.allstars .edition{font-size:11px;letter-spacing:3px;color:#c8bfdc}
+.allstars .title-row{display:flex;align-items:center;justify-content:space-between;margin-top:15px}
+.allstars h1{font-size:49px;letter-spacing:-2px;line-height:1;margin:0;font-weight:950}
+.allstars h1 span{color:#c7b7ff}.allstars time{font-family:Consolas,monospace;font-size:17px;color:#c9bedb;letter-spacing:2px}
+.character-lineup{position:absolute;left:25px;right:25px;top:106px;height:284px;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}
+.cast{position:relative;margin:0;min-width:0;isolation:isolate;overflow:hidden;border-bottom:3px solid var(--cast);animation:team-arrive .7s ease-out both;animation-delay:calc(var(--order)*100ms)}
+.cast-gojo{--cast:#79dcff}.cast-naruto{--cast:#ffb85d}.cast-itachi{--cast:#ef6c7e}.cast-sasuke{--cast:#b9a0ff}.cast-luffy{--cast:#eaa052}
+.cast-aura{position:absolute;inset:10px 0 0;background:radial-gradient(ellipse at 50% 65%,color-mix(in srgb,var(--cast) 25%,transparent),transparent 75%);z-index:-1}
+.cast:before{content:"";position:absolute;top:25px;left:0;bottom:40px;width:1px;background:linear-gradient(transparent,var(--cast),transparent);opacity:.4}
+.cast img{position:absolute;left:-10%;bottom:33px;width:120%;height:240px;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 0 8px color-mix(in srgb,var(--cast) 20%,transparent))}
+.cast figcaption{position:absolute;bottom:0;left:0;right:0;padding:9px 8px;background:linear-gradient(90deg,#10101e,color-mix(in srgb,var(--cast) 15%,#10101e));font-size:13px;font-weight:800;letter-spacing:2px;white-space:nowrap;color:var(--cast)}
+.cast figcaption span{font-family:Consolas,monospace;margin-right:10px;opacity:.6;font-size:10px}
+.allstars .game-area{outline:1px solid #c6b6ef;box-shadow:-5px 0 18px #65caff33,5px 0 18px #ffba5a33}
+.allstars .game-caption{font-size:12px;letter-spacing:3px;color:#c9bedb}
+.allstars .edge{left:0;right:0;top:-2px;height:3px;background:linear-gradient(90deg,#79dcff,#ffb85d,#ef6c7e,#b9a0ff,#eaa052)}
+.allstars .edge-b{top:auto;bottom:-2px}
+.allstars .lower-surface{background:radial-gradient(ellipse at 10% 70%,#212138,transparent 70%),#10101e}
+.allstars .intermission{font-size:18px;letter-spacing:4px;border-bottom:1px solid #5e536e}
+.allstars .ornament{font-size:60px;color:#c9b5ff}
+.allstars .dashboard-heading{border:0;font-size:22px;letter-spacing:3px}
+.allstars .widget{background:#1b1a2d;border:1px solid #5e536e;border-radius:14px}
+.allstars .widget-heading{background:#282339;border-bottom-color:#5e536e;font-size:18px}
+.allstars .widget-heading>span:last-child{font-size:11px;color:#c9bedb}
+.allstars .goal{border-left:4px solid #79dcff}.allstars .ranking{border-left:4px solid #b9a0ff}
+.allstars footer{font-size:11px;letter-spacing:1px;color:#bdb1ce}
+@keyframes team-arrive{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){.allstars *{animation:none!important}}

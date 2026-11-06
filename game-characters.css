@@ -1,0 +1,19 @@
+/* Character additions preserve the game themes and native-widget geometry. */
+.game-theme.character-edition .masthead{text-align:left;padding:34px 48px}
+.game-theme.character-edition .headline{font-size:79px;margin-top:48px;transform:none;text-align:left;font-weight:900}
+.game-theme.character-edition .brand-last{margin-left:0;padding-left:0}
+.game-theme.character-edition .headline-detail{margin:0;width:550px;padding-top:12px;text-align:left}
+.game-theme.character-edition .subtitle{margin:16px 0;font-size:11px}
+.game-theme.character-edition .theme-sigil,.game-theme.character-edition .theme-stamp{display:none}
+.game-theme.character-edition .edition{font-size:11px;letter-spacing:2px}
+.game-theme.character-edition .edition>span:last-child{font-size:10px}
+.game-theme.character-edition .character-art{right:-10px;width:450px;height:335px;bottom:0}
+.game-theme.character-edition.hon .headline{font-weight:400;font-size:83px}
+.game-theme.character-edition.lol .headline{font-weight:400;font-size:83px;margin-top:48px}
+.game-theme.character-edition.lol .upper-surface:before{left:640px;width:400px;top:45px;height:430px}
+.game-theme.character-edition.lol .character-art{width:455px;right:-5px}
+.game-theme.character-edition.valorant .headline{font-size:80px;line-height:.94}
+.game-theme.character-edition.valorant .character-art{right:0;width:430px}
+.game-theme.character-edition.pubg .headline{font-size:85px;letter-spacing:-2px;margin-top:28px}
+.game-theme.character-edition.pubg .edition{padding:10px}
+.game-theme.character-edition.pubg .character-art{height:325px}
